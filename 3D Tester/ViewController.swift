@@ -23,7 +23,7 @@ class ViewController: UIViewController {
         case .Available: compatible = true
         default: adviseLabel.text = 
             compatible = false
-            "Unsupported device!"
+            adviceLabel.text = "Unsupported device!"
             percentLabel.text = "Error!"
         }
     }
