@@ -12,38 +12,45 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var adviseLabel: UILabel!
     @IBOutlet weak var percentLabel: UILabel!
-
+    
     var forceAmount: CGFloat = 0.0
-
+    var compatible = true
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         switch self.traitCollection.forceTouchCapability {
-        case .Available: return
-        default: adviseLabel.text = "Unsupported device!"
+        case .Available: compatible = true
+        default:
+            compatible = false
+            adviseLabel.text = "Unsupported device!"
             percentLabel.text = "Error!"
         }
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        handleTouch(touches.first!)
+        if compatible { handleTouch(touches.first!) }
     }
     
     override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        handleTouch(touches.first!)
+        if compatible { handleTouch(touches.first!) }
     }
     
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        self.view.backgroundColor = UIColor(white: 1, alpha: 1)
-        
-        adviseLabel.textColor = UIColor.blackColor()
-        percentLabel.textColor = UIColor.blackColor()
-        
-        percentLabel.text = "0%"
+        if compatible {
+            
+            self.view.backgroundColor = UIColor(white: 1, alpha: 1)
+            
+            adviseLabel.textColor = UIColor.blackColor()
+            percentLabel.textColor = UIColor.blackColor()
+            
+            percentLabel.text = "0%"
+            
+        }
     }
     
     func handleTouch(touch:UITouch) {
-
+        
         forceAmount = touch.force/touch.maximumPossibleForce
         let exactPercent = forceAmount*100
         let percent = String(format: "%.0f%%", exactPercent)
@@ -54,10 +61,10 @@ class ViewController: UIViewController {
         
         adviseLabel.textColor = UIColor(red: forceAmount, green: forceAmount, blue: forceAmount, alpha: 1)
         percentLabel.textColor = UIColor(red: forceAmount, green: forceAmount, blue: forceAmount, alpha: 1)
-
+        
         setNeedsStatusBarAppearanceUpdate()
     }
-
+    
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return forceAmount > 0.5 ? .LightContent : .Default
     }
