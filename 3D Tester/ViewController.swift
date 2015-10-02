@@ -14,32 +14,39 @@ class ViewController: UIViewController {
     @IBOutlet weak var percentLabel: UILabel!
 
     var forceAmount: CGFloat = 0.0
+    var compatible: Bool
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         switch self.traitCollection.forceTouchCapability {
-        case .Available: return
-        default: adviseLabel.text = "Unsupported device!"
+        case .Available: compatible = true
+        default: adviseLabel.text = 
+            compatible = false
+            "Unsupported device!"
             percentLabel.text = "Error!"
         }
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        handleTouch(touches.first!)
+        if compatible { handleTouch(touches.first!) }
     }
     
     override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        handleTouch(touches.first!)
+        if compatible { handleTouch(touches.first!) }
     }
     
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        self.view.backgroundColor = UIColor(white: 1, alpha: 1)
+        if compatible {
         
-        adviseLabel.textColor = UIColor.blackColor()
-        percentLabel.textColor = UIColor.blackColor()
+            self.view.backgroundColor = UIColor(white: 1, alpha: 1)
         
-        percentLabel.text = "0%"
+            adviseLabel.textColor = UIColor.blackColor()
+            percentLabel.textColor = UIColor.blackColor()
+        
+            percentLabel.text = "0%"
+            
+         }
     }
     
     func handleTouch(touch:UITouch) {
