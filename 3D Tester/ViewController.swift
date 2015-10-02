@@ -13,6 +13,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var adviseLabel: UILabel!
     @IBOutlet weak var percentLabel: UILabel!
 
+    var forceAmount: CGFloat = 0.0
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -41,19 +43,24 @@ class ViewController: UIViewController {
     }
     
     func handleTouch(touch:UITouch) {
-        
-        let exactPercent = touch.force/touch.maximumPossibleForce*100
+
+        forceAmount = touch.force/touch.maximumPossibleForce
+        let exactPercent = forceAmount*100
         let percent = String(format: "%.0f%%", exactPercent)
         
         percentLabel.text = percent
         
-        self.view.backgroundColor = UIColor(red: touch.force/touch.maximumPossibleForce, green: touch.force/touch.maximumPossibleForce, blue: touch.force/touch.maximumPossibleForce, alpha: 1).inverse()
+        self.view.backgroundColor = UIColor(red: forceAmount, green: forceAmount, blue: forceAmount, alpha: 1).inverse()
         
-        adviseLabel.textColor = UIColor(red: touch.force/touch.maximumPossibleForce, green: touch.force/touch.maximumPossibleForce, blue: touch.force/touch.maximumPossibleForce, alpha: 1)
-        percentLabel.textColor = UIColor(red: touch.force/touch.maximumPossibleForce, green: touch.force/touch.maximumPossibleForce, blue: touch.force/touch.maximumPossibleForce, alpha: 1)
-        
+        adviseLabel.textColor = UIColor(red: forceAmount, green: forceAmount, blue: forceAmount, alpha: 1)
+        percentLabel.textColor = UIColor(red: forceAmount, green: forceAmount, blue: forceAmount, alpha: 1)
+
+        setNeedsStatusBarAppearanceUpdate()
     }
 
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return forceAmount > 0.5 ? .LightContent : .Default
+    }
 }
 
 extension UIColor {
